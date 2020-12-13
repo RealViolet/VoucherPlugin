@@ -1,0 +1,4 @@
+name: Voucher
+version: 1.0
+main: me.violet.voucher.VoucherPlugin
+commands:
