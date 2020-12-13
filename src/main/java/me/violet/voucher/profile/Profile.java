@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Data
 public class Profile {
@@ -30,7 +31,6 @@ public class Profile {
     public Profile(UUID uuid, String name) {
         this.uuid = uuid;
         this.name = name;
-        this.vouchers = new ArrayList<>();
         this.load();
     }
 
@@ -41,12 +41,7 @@ public class Profile {
                 this.name = document.getString("name");
             }
             this.vouchers = new ArrayList<>();
-            List<String> voucherStrings = document.get("vouchers", ArrayList.class);
-
-            for (String voucherString : voucherStrings) {
-                Voucher voucher = Voucher.fromJson(voucherString);
-                vouchers.add(voucher);
-            }
+            vouchers = (document.getList("vouchers", Document.class).stream().map(Voucher::new).collect(Collectors.toList()));
             profiles.put(this.uuid, this);
         }
     }
@@ -55,11 +50,7 @@ public class Profile {
         Document document = new Document();
         document.append("uuid", this.uuid.toString());
         document.append("name", this.name);
-        List<String> voucherStrings = new ArrayList<>();
-        for (Voucher voucher : vouchers) {
-            voucherStrings.add(voucher.toJson());
-        }
-        document.append("vouchers", voucherStrings);
+        document.append("vouchers", vouchers.stream().map(Voucher::toBson).collect(Collectors.toList()));
         VoucherPlugin.getInstance().getMongoManager().getProfiles()
                 .replaceOne(Filters.eq("uuid", this.uuid.toString()), document, new UpdateOptions().upsert(true));
     }

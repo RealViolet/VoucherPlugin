@@ -44,20 +44,4 @@ public class Voucher {
                 .append("redeemed", this.redeemed);
     }
 
-    public String toJson() {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("name", this.name);
-        jsonObject.addProperty("addedBy", this.addedBy);
-        jsonObject.addProperty("redeemed", this.redeemed);
-        return jsonObject.toString();
-    }
-
-    public static Voucher fromJson(String string) {
-        JsonObject json = new JsonParser().parse(string).getAsJsonObject();
-        String name = json.get("name").getAsString();
-        String addedBy = json.get("addedBy").getAsString();
-        boolean redeemed = json.get("redeemed").getAsBoolean();
-        return new Voucher(name, addedBy, redeemed);
-    }
-
 }
