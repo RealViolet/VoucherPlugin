@@ -58,6 +58,6 @@ public class VoucherMenu extends PagedMenu {
 
     @Override
     public String getRawTitle(Player player) {
-        return CC.GOLD + player.getName() + "'s Vouchers";
+        return CC.GOLD + target.getName() + "'s Vouchers";
     }
 }
