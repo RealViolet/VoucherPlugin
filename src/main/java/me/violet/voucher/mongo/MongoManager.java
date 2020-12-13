@@ -19,7 +19,6 @@ public class MongoManager {
     public MongoManager() {
         mongoClient = new MongoClient(new ServerAddress("localhost", 27017));
         mongoDatabase = mongoClient.getDatabase("Voucher");
-        vouchers = mongoDatabase.getCollection("vouchers");
         profiles = mongoDatabase.getCollection("profiles");
     }
 
